@@ -1,0 +1,15 @@
+{
+  "name": "CP$",
+  "short_name": "CP$",
+  "start_url": "cp$.html",
+  "display": "standalone",
+  "background_color": "#222222",
+  "theme_color": "#222222",
+  "icons": [
+    {
+      "src": "cp-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}

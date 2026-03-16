@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CP$</title>
+
+<link rel="icon" href="cp-icon.png">
+<link rel="apple-touch-icon" href="cp-icon.png">
+<link rel="manifest" href="manifest.json">
+
+<style>
+
+body{
+background:#222;
+color:white;
+font-family:Arial, sans-serif;
+padding:20px;
+margin:0;
+font-size:20px;
+}
+
+h1{
+font-size:32px;
+margin-bottom:10px;
+}
+
+textarea{
+width:100%;
+height:240px;
+background:#333;
+color:white;
+border:1px solid #666;
+padding:14px;
+font-size:22px;
+box-sizing:border-box;
+resize:vertical;
+}
+
+button{
+padding:16px 26px;
+font-size:20px;
+margin-top:12px;
+margin-right:10px;
+background:#444;
+color:white;
+border:1px solid #888;
+cursor:pointer;
+}
+
+button:hover{
+background:#666;
+}
+
+.result{
+margin-top:20px;
+font-size:22px;
+line-height:1.6;
+}
+
+.best{
+color:#00ff88;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>CP$</h1>
+
+<p>Formato: gramos-precio</p>
+
+<textarea id="datos" inputmode="numeric"></textarea>
+
+<br>
+
+<button onclick="calcular()">Calculate</button>
+<button onclick="resetear()">Reset</button>
+
+<div class="result" id="resultado"></div>
+
+<script>
+
+const area = document.getElementById("datos")
+
+area.value = localStorage.getItem("cp_datos") || ""
+
+area.addEventListener("input", () => {
+localStorage.setItem("cp_datos", area.value)
+})
+
+function calcular(){
+
+let lineas = area.value.trim().split("\n")
+
+let productos = []
+
+for(let linea of lineas){
+
+if(linea.trim()==="") continue
+
+let partes = linea.split("-")
+
+let gramos = parseFloat(partes[0])
+let precio = parseFloat(partes[1])
+
+let kilo = (precio/gramos)*1000
+
+productos.push({gramos,precio,kilo})
+
+}
+
+productos.sort((a,b)=>a.kilo-b.kilo)
+
+let texto = ""
+
+productos.forEach((p,i)=>{
+
+let clase = i==0 ? "best" : ""
+
+texto += `<div class="${clase}">
+${i+1}) ${p.gramos} g - $${p.precio} → $${Math.round(p.kilo)}/kg
+</div>`
+
+})
+
+document.getElementById("resultado").innerHTML = texto
+
+}
+
+function resetear(){
+
+area.value = ""
+document.getElementById("resultado").innerHTML = ""
+localStorage.removeItem("cp_datos")
+
+}
+
+</script>
+
+</body>
+
+</html>
